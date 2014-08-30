@@ -41,24 +41,32 @@ https://github.com/mtwtkman/leet
 コマンド                                *leet-commands*
 
 :Leet                                   *:Leet*
-                                        カーソル上の単語をリート文字に変換
+      カーソル上の単語をリート文字に変換
 
 ---------------------------------------------------------------------------
 
 関数                                    *leet-functions*
 
 
-leet#convert()                          *leet#convert()*
-                                        |:Leet|の関数版です。
+leet#convert({target})                  *leet#convert()*
+      {target}の文字をリート文字に変換
+
+leet#current_pos()                      *leet#current_pos()*
+      カーソル下の文字をリート文字に変換
+
+leet#selected_pos()			*leet#selected_pos()*
+      選択した文字をリート文字に変換
 
 
 ===========================================================================
 
 キーマッピング                          *leet-key-mappings*
 
-<Plug>(leet-convert)                    *<Plug>(leet-convert)*
-Leetコマンドを実行します。
+noremap <Plug>(leet-current_pos) 	*<Plug>(leet-current_pos)*
+      カーソル下の文字をリート文字に変換
 
+noremap <Plug>(leet-selected_pos)	*<Plug>(leet-selected_pos)*
+      選択した文字をリート文字に変換
 
 ===========================================================================
 
