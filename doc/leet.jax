@@ -1,4 +1,4 @@
-*leet.txt*
+*leet.txt*       任意の半角アルファベットをリート文字に変換する
 
 
 Version: 1.0
@@ -62,13 +62,13 @@ leet#selected_pos()			*leet#selected_pos()*
 
 キーマッピング                          *leet-key-mappings*
 
-noremap <Plug>(leet-current_pos) 	*<Plug>(leet-current_pos)*
+<Plug>(leet-current_pos) 		*<Plug>(leet-current_pos)*
       カーソル下の文字をリート文字に変換
 
-noremap <Plug>(leet-selected_pos)	*<Plug>(leet-selected_pos)*
+<Plug>(leet-selected_pos)		*<Plug>(leet-selected_pos)*
       選択した文字をリート文字に変換
 
-map <silent><Leader>L <Plug>(leet-selected_pos)	*<silent><Leader>L*
+<silent><Leader>L <Plug>(leet-selected_pos)	*<silent><Leader>L*
       ビジュアルモード時<Leader>Lで選択した文字をリート文字に変換
 
 
