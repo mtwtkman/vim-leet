@@ -68,6 +68,10 @@ noremap <Plug>(leet-current_pos) 	*<Plug>(leet-current_pos)*
 noremap <Plug>(leet-selected_pos)	*<Plug>(leet-selected_pos)*
       選択した文字をリート文字に変換
 
+map <silent><Leader>L <Plug>(leet-selected_pos)	*<silent><Leader>L*
+      ビジュアルモード時<Leader>Lで選択した文字をリート文字に変換
+
+
 ===========================================================================
 
 更新履歴                                *leet-changelog*
