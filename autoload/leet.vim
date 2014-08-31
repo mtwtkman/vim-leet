@@ -12,50 +12,43 @@ let s:file = expand('<sfile>:h').'/leet.json'
 let s:leet_data = s:leet_load()
 
 
-function! leet#convert(target, head, tail)
-  "" ここ変換処理が重複しててやばい。どうにかしたい
-  if type(a:target) == 1
-    let l:leet_word = ''
-    for char in split(toupper(a:target), '\zs')
-      if has_key(s:leet_data, char)
-        let l:leet_word = l:leet_word . s:Random.sample(s:leet_data[char])
-      else
-        let l:leet_word = l:leet_word . char
-      endif
-   endfor
-   let l:newl = substitute(getline('.'), a:target, l:leet_word, 'g')
-   call setline('.', l:newl)
-  elseif type(a:target) == 3
-    let l:result = []
-    " 変換対象外の先頭部分を追加
-    let l:leet_word = a:head
-    for word in a:target
-      for char in split(toupper(word), '\zs')
-        if has_key(s:leet_data, char)
-          let l:leet_word = l:leet_word . s:Random.sample(s:leet_data[char])
-        else
-          let l:leet_word = l:leet_word . char
-        endif
-     endfor
-      let l:result += [l:leet_word]
-      let l:leet_word = ''
-    endfor
-    " 変換対象外の後尾部分を追加
-    let l:result[-1] = l:result[-1] . a:tail
-    call setline('.', l:result)
-  endif
+function! leet#convert(target, word)
+  let l:leet_word = a:word
+  for char in split(toupper(a:target), '\zs')
+    if has_key(s:leet_data, char)
+      let l:leet_word = l:leet_word . s:Random.sample(s:leet_data[char])
+    else
+      let l:leet_word = l:leet_word . char
+    endif
+  endfor
+  return l:leet_word
 endfunction
 
 
 function! leet#current_pos()
+  " カーソル位置の1単語を変換
   let l:target = expand("<cword>")
-  call leet#convert(l:target, getpos('.'), 'dummy')
+  let l:leet_word = ''
+  let l:leet_word = leet#convert(l:target, l:leet_word)
+  let l:newl = substitute(getline('.'), l:target, l:leet_word, 'g')
+  call setline('.', l:newl)
 endfunction!
 
 
 function! leet#selected_pos()
-  let l:pos_info = s:get_selected_pos()
-  call leet#convert(l:pos_info[0], l:pos_info[1], l:pos_info[2])
+  " 選択範囲の文字を変換
+  let [l:target, l:head, l:tail] = s:get_selected_pos()
+  let l:result = []
+  " 変換対象外の先頭部分を追加
+  let l:leet_word = l:head
+  for word in l:target
+    let l:leet_word = leet#convert(word, l:leet_word)
+    let l:result += [l:leet_word]
+    let l:leet_word = ''
+  endfor
+  " 変換対象外の後尾部分を追加
+  let l:result[-1] = l:result[-1] . l:tail
+  call setline('.', l:result)
 endfunction
 
 
