@@ -25,20 +25,32 @@ function! leet#convert(target, word)
 endfunction
 
 
+" カーソル位置の1単語を変換
 function! leet#current_pos()
-  " カーソル位置の1単語を変換
   let l:target = expand("<cword>")
-  let l:leet_word = ''
-  let l:leet_word = leet#convert(l:target, l:leet_word)
-  let l:newl = substitute(getline('.'), l:target, l:leet_word, 'g')
+  let l:leftside = split(getline('.')[:getpos('.')[2]-2], '\W')
+  let l:leet_word = leet#convert(l:target, '')
+  " 位置を特定して単語を変換する
+  let l:tmp = split(getline('.'), '\W')
+  let l:tmp[len(l:leftside)-1] = l:leet_word
+  let l:words = []
+  for w in l:tmp
+    if w != ''
+      let l:words += ["'". w . "'"]
+    endif
+  endfor
+  let l:format = substitute(getline('.'), '\w\+', '%s', 'g')
+  let l:args = 'printf("' . l:format . '", ' . join(l:words, ', ') . ')'
+  execute "let l:newl = " . l:args
+  echo l:newl
   call setline('.', l:newl)
 endfunction!
 
-
+" 選択範囲の文字を変換
 function! leet#selected_pos()
-  " 選択範囲の文字を変換
   let [l:target, l:head, l:tail] = s:get_selected_pos()
   let l:result = []
+
   " 変換対象外の先頭部分を追加
   let l:leet_word = l:head
   for word in l:target
