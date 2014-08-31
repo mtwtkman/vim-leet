@@ -28,7 +28,7 @@ endfunction
 " カーソル位置の1単語を変換
 function! leet#current_pos()
   let l:target = expand("<cword>")
-  let l:leftside = split(getline('.')[: getpos('.')[2]==1?0:getpos('.')[2]-2], '\W')
+  let l:leftside = split(getline('.')[: getpos('.')[2]==1?0:getpos('.')[2]], '\W')
   let l:leet_word = leet#convert(l:target, '')
 
   " 位置を特定して単語を変換する
