@@ -30,7 +30,9 @@ function! leet#current_pos()
   let l:target = expand("<cword>")
   let l:leftside = split(getline('.')[:getpos('.')[2]-2], '\W')
   let l:leet_word = leet#convert(l:target, '')
+
   " 位置を特定して単語を変換する
+  "" 実装やばすぎるので改善したい{{{1
   let l:tmp = split(getline('.'), '\W')
   let l:tmp[len(l:leftside)-1] = l:leet_word
   let l:words = []
@@ -39,11 +41,28 @@ function! leet#current_pos()
       let l:words += ["'". w . "'"]
     endif
   endfor
+
   let l:format = substitute(getline('.'), '\w\+', '%s', 'g')
-  let l:args = 'printf("' . l:format . '", ' . join(l:words, ', ') . ')'
-  execute "let l:newl = " . l:args
-  echo l:newl
+  let l:newl = ''
+  "" printfの引数は18個までしかとれないので越えてたら分割する
+  if len(l:words) > 18
+    let l:start = 0
+    for i in range(1+len(l:words)/18)
+      let l:count = len(l:words)==i?len(l:words)%18==0?18:len(l:words)%18:18
+      let l:index = matchend(l:format, '\v(\%s)', l:start, l:count)
+      let l:args = 'printf("' . l:format[l:start : l:index] . '", ' .
+            \ join(l:words[i*18:i*18+l:count-1], ', ') . ')'
+      execute 'let l:result = ' . l:args
+      let l:newl = l:newl . l:result
+      unlet l:result
+      let l:start = l:index+1
+    endfor
+  else
+    let l:args = 'printf("' . l:format . '", ' . join(l:words, ', ') . ')'
+    execute 'let l:newl = ' . l:args
+  endif
   call setline('.', l:newl)
+  "" }}}1
 endfunction!
 
 " 選択範囲の文字を変換
