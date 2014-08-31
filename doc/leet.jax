@@ -48,11 +48,8 @@ https://github.com/mtwtkman/leet
 関数                                    *leet-functions*
 
 
-leet#convert({target})                  *leet#convert()*
-      {target}の文字をリート文字に変換
-
 leet#current_pos()                      *leet#current_pos()*
-      カーソル下の文字をリート文字に変換
+      カーソル下の1単語をリート文字に変換
 
 leet#selected_pos()			*leet#selected_pos()*
       選択した文字をリート文字に変換
