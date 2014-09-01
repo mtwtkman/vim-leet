@@ -5,18 +5,19 @@ set cpo&vim
 let s:V = vital#of("leet")
 let s:Json = s:V.import("Web.JSON")
 let s:Random = s:V.import("Random")
+let s:Search = s:V.import("Coaster.Search")
+let s:Buffer = s:V.import("Coaster.Buffer")
 
-
-let s:leet = {}
+let s:leet_dict = {}
 let s:file = expand('<sfile>:h').'/leet.json'
-let s:leet_data = s:leet_load()
 
 
 function! leet#convert(target, word)
+  call s:leet_load()
   let l:leet_word = a:word
   for char in split(toupper(a:target), '\zs')
-    if has_key(s:leet_data, char)
-      let l:leet_word = l:leet_word . s:Random.sample(s:leet_data[char])
+    if has_key(s:leet_dict, char)
+      let l:leet_word = l:leet_word . s:Random.sample(s:leet_dict[char])
     else
       let l:leet_word = l:leet_word . char
     endif
@@ -63,6 +64,7 @@ function! leet#current_pos()
   endif
   call setline('.', l:newl)
   "" }}}1
+
 endfunction!
 
 " 選択範囲の文字を変換
@@ -84,10 +86,9 @@ endfunction
 
 
 function! s:leet_load()
-  if empty(s:leet)
-    let s:leet = s:Json.decode(join(readfile(s:file), "\n"))
+  if empty(s:leet_dict)
+    let s:leet_dict = s:Json.decode(join(readfile(s:file), "\n"))
   endif
-  return s:leet
 endfunction
 
 
