@@ -40,6 +40,23 @@ function! leet#current_pos()
   call s:Buffer.paste_for_text('v', l:first, l:last, l:leet_word)
 endfunction
 
+" 選択範囲の文字を変換
+function! leet#selected_pos()
+  let [l:target, l:head, l:tail] = s:get_selected_pos()
+  let l:result = []
+
+  " 変換対象外の先頭部分を追加
+  let l:leet_word = l:head
+  for word in l:target
+    let l:leet_word = leet#convert(word, l:leet_word)
+    let l:result += [l:leet_word]
+    let l:leet_word = ''
+  endfor
+  " 変換対象外の後尾部分を追加
+  let l:result[-1] = l:result[-1] . l:tail
+  call setline('.', l:result)
+endfunction
+
 
 function! s:leet_load()
   if empty(s:leet_dict)
